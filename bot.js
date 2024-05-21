@@ -1,10 +1,13 @@
-const { Client, GatewayIntentBits, AttachmentBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, AttachmentBuilder, Attachment } = require('discord.js');
 const axios = require('axios');
 const cron = require('node-cron');
-const config = require('./config.js');
+const fs = require('fs');
+const configPath = './config.json';
+let config = require(configPath);
 const { createCanvas, loadImage } = require('canvas');
 const path = require('path');
 const getRandomMessage = require('./randomMessage');
+
 
 const client = new Client({
     intents: [
@@ -25,57 +28,71 @@ client.once('ready', () => {
 client.on('messageCreate', async message => {
     if (message.author.bot) return;
 
-    if (message.content.startsWith('!latestgame')) {
-        try {
-            const latestGame = await getLatestGame();
-            if (latestGame) {
-                message.channel.send(`Latest Game: ${JSON.stringify(latestGame, null, 2)}`);
-            } else {
-                message.channel.send('No recent games found.');
-            }
-        } catch (error) {
-            message.channel.send('Error fetching game data.');
-            console.error(error);
+    const args = message.content.trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+
+    if (command === '!addsummoner') {
+        const input = args.join(' ');
+        const [summonerInfo, discordUsername] = input.split(' ');
+        
+        if (!summonerInfo || !summonerInfo.includes('#') || !discordUsername) {
+            return message.channel.send('Please provide input in the format "SummonerName#Tagline DiscordUsername".');
         }
+
+        const [summonerName, tagline] = summonerInfo.split('#');
+        if (!summonerName || !tagline) {
+            return message.channel.send('Invalid summoner name format. Please provide in the format "SummonerName#Tagline".');
+        }
+
+        addSummoner(summonerName, tagline, discordUsername);
+        message.channel.send(`Summoner ${summonerName}#${tagline} linked to ${discordUsername}.`);
     }
+
 });
 
-async function getSummonerPUUID() {
-    try{
-    //console.log('getting PUUID')
-    const response = await axios.get(`https://${config.region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${config.summonerName}/${config.tagline}?api_key=${config.riotApiKey}`, {
-    });
-    //console.log(response);
-    return response.data;
-    } catch(error){
+function addSummoner(summonerName, tagline, discordUsername) {
+    const summonerExists = config.summoners.find(summoner => summoner.name === summonerName && summoner.tagline === tagline);
+    if (!summonerExists) {
+        config.summoners.push({ name: summonerName, tagline: tagline, discordUsername: discordUsername, lastMatchId: null });
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+        console.log(`Summoner ${summonerName}#${tagline} linked to ${discordUsername} added to config.`);
+    } else {
+        console.log(`Summoner ${summonerName}#${tagline} already exists in config.`);
+    }
+}
+
+
+async function getSummonerPUUID(summonerName,tagline) {
+    try {
+        console.log('Getting PUUID for', summonerName);
+        const response = await axios.get(`https://${config.region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tagline}?api_key=${config.riotApiKey}`);
+        return response.data;
+    } catch (error) {
         console.error('Error in getSummonerPUUID:', error);
     }
 }
 
 async function getLatestGameId(PUUID) {
-
-    try{
-    const response = await axios.get(`https://${config.region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${PUUID}/ids?start=0&count=20&api_key=${config.riotApiKey}`, {
-    });
-    //console.log(response.data)
-    if (response.data.length > 0) {
-        //console.log(response.data[0])
-        return response.data[0];
-    }
-    return null;
-    } catch (error){
+    try {
+        const response = await axios.get(`https://${config.region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${PUUID}/ids?start=0&count=20&api_key=${config.riotApiKey}`);
+        if (response.data.length > 0) {
+            //console.log(response.data[0]);
+            return response.data[0];
+        }
+        return null;
+    } catch (error) {
         console.error('Error in getLatestGameId:', error);
     }
 }
 
-async function getmatchDetails(matchID){
-    try{
-        const response = await axios.get(`https://${config.region}.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${config.riotApiKey}`,
-        {});
+async function getMatchDetails(matchID) {
+    try {
+        const response = await axios.get(`https://${config.region}.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${config.riotApiKey}`);
         //console.log(response);
         return response;
+        
     } catch (error) {
-        console.error('Error in getmatchDetails:', error);
+        console.error('Error in getMatchDetails:', error);
     }
 }
 
@@ -125,19 +142,21 @@ async function extractDetails(matchDetails, PUUID){
         console.error('Error in extractDetails:', error);
     }
 }
-
-async function isranked(details){
-    if(details[1] == 420 && details[6] != true){
-
+//details[1] == 420 &&
+async function isranked(details,discordUsername){
+    if(details[6] != true){
         rankedData = await rankedinfo(details);
-
+        console.log("did")
         const imageBuffer = await generateImage(details,rankedData);
-
+        console.log("did2")
         const channel = client.channels.cache.get(config.discordChannelId);
 
         if(channel) {
-            const attachment = new AttachmentBuilder(imageBuffer, {name: 'game-details.png'});
-            channel.send({ files: [attachment] });
+            console.log("did3")
+            await channel.send({
+                content: `<@${discordUsername}>`,
+                files: [imageBuffer]
+            });
         } else {
             console.error('Channel not found.');
         }
@@ -151,38 +170,62 @@ async function isranked(details){
 
 async function rankedinfo(details){
     const rankedinfo = [];
-    const response = await axios.get(`https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/${details[2]}?api_key=${config.riotApiKey}`,
-    {});
 
-    //console.log(response);
-    console.log(response.data[0].tier);
+    try{
+        const response = await axios.get(`https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/${details[2]}?api_key=${config.riotApiKey}`,
+        {});
 
-    rankedinfo.push(response.data[0].tier);
-    rankedinfo.push(response.data[0].rank);
+        console.log(response);
+        //console.log(response.data[0].tier);
+        if(response.data.length === 0){
+            console.log("ranked info is empty");
+            rankedinfo.push("UNRANKED");
+            rankedinfo.push(" ");
+        }
+        else{
+            rankedinfo.push(response.data[0].tier);
+            rankedinfo.push(response.data[0].rank);
+        }
 
-    return rankedinfo;
+        return rankedinfo;
+    } catch (error){
+        console.error('Error fetching ranked info:', error);
+        return null;
+    }
 }
 
 async function startMonitoring() {
     try{
-        console.log("getting latest game ID")
-        const summonerData = await getSummonerPUUID();
-        const PUUID = summonerData.puuid;
-        //console.log(PUUID)
         cron.schedule('* * * * *', async () => {
-            console.log("starting monitoring");
-            
-            const latestGameId = await getLatestGameId(PUUID);
-            if (latestGameId  !== lastMatchId) {
-                lastMatchId = latestGameId;
-                const matchDetails = await getmatchDetails(latestGameId);
-                details = await extractDetails(matchDetails, PUUID)
-                //console.log(details);
-                
-                await isranked(details);
 
-        
-            //console.log(details);
+            for (const summoner of config.summoners) {
+                   
+                    console.log("Getting latest game ID for", summoner.name);
+                    const summonerData = await getSummonerPUUID(summoner.name,summoner.tagline);
+                    const PUUID = summonerData.puuid;
+                    
+                    console.log("starting monitoring");
+                    
+                    const latestGameId = await getLatestGameId(PUUID);
+                    console.log(latestGameId);
+                    if (latestGameId  !== summoner.lastMatchId) {
+                        const matchDetails = await getMatchDetails(latestGameId);
+                        details = await extractDetails(matchDetails, PUUID)
+                        console.log(details);
+
+                        await isranked(details,summoner.discordUsername);
+
+                        summoner.lastMatchId = latestGameId;
+                        fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+                    
+                        //console.log(details);
+                        
+                        
+
+                
+                    //console.log(details);
+                    }
+
             }
         });
     } catch (error) {
@@ -204,6 +247,7 @@ async function generateImage(details, rankedData){
 
     const defeat = await loadImage(path.join(__dirname, 'assets', 'background', `Defeat.png`));
     ctx.drawImage(defeat, 475, -50, 300, 300);
+
     
     const summonerRank = await loadImage(path.join(__dirname, 'assets', 'ranked_icons', `${rankedData[0]}.png`));
     const rankImageWidth = 200; // Adjust as needed
@@ -234,6 +278,7 @@ async function generateImage(details, rankedData){
 
     const randomMessage = getRandomMessage();
     drawCenteredText(ctx, randomMessage, 300, 200, 200);
+
 
     // Return the image as a buffer
     return canvas.toBuffer();

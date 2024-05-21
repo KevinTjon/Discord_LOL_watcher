@@ -8,6 +8,10 @@ const messages = [
     "Next rank is the opposite way buddy",
     "JG DIFF",
     "stop jacking your cockys buddy",
+    "??????????",
+    "You ok?",
+    "Maybe its alt account angle",
+    "Maybe this elo is a bit too high for u"
     // Add more messages as needed
 ];
 

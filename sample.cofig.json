@@ -1,0 +1,15 @@
+{
+    "summoners": [
+      {
+        "name": "SummonerName",
+        "tagline": "tagline",
+        "discordUsername": "discordUsername",
+        "lastMatchId": null
+      }
+      
+    ],
+    "region": "americas",
+    "riotApiKey": "RIOT API KEY",
+    "discordToken": "DISCORD TOKEN KEY",
+    "discordChannelId": "DISCORD CHANNEL ID"
+  }
