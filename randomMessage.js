@@ -7,6 +7,7 @@ const messages = [
     "Mortdogged",
     "Next rank is the opposite way buddy",
     "JG DIFF",
+    "stop jacking your cockys buddy",
     // Add more messages as needed
 ];
 
