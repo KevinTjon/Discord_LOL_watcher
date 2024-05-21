@@ -18,6 +18,6 @@ npm-debug.log*
 
 .env
 
-config.js
+config.json
 test.js
 node_modules/
