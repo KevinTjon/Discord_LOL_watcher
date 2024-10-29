@@ -142,9 +142,8 @@ async function extractDetails(matchDetails, PUUID){
         console.error('Error in extractDetails:', error);
     }
 }
-//details[1] == 420 &&
 async function isranked(details,discordUsername){
-    if(details[6] != true){
+    if(details[1] == 420 && details[6] != true){
         rankedData = await rankedinfo(details);
         console.log("did")
         const imageBuffer = await generateImage(details,rankedData);
@@ -254,20 +253,21 @@ async function generateImage(details, rankedData){
     const rankImageHeight = 200; // Adjust as needed
     ctx.drawImage(summonerRank, 0, 0, rankImageWidth, rankImageHeight);
     
-
+    console.log("generating");
     ctx.font = '20px Sans'; // Set the font size and family
     ctx.fillStyle = '#FFFFFF'; // Set the text color
     // Draw text to display summoner rank and tier
     const summonerRankText = rankedData[0];
     const summonerTierText = rankedData[1];
-    const SummonerName = details[0];
-
+    var SummonerName = details[0];
+    if((SummonerName.localeCompare("我恨你婊子")) == 0){
+        SummonerName = "Zou's chinese account";
+    }
     const textX = 45; // Adjust as needed
-    const textY = 201; // Adjust as needed
+    const textY = 201; // Adjust as needed\
     ctx.fillText(summonerRankText, textX, textY-10);
     ctx.fillText(summonerTierText, textX+100, textY-10 );
     ctx.fillText(SummonerName, textX+30, textY+20 );
-    
 
     // Load and draw champion image
     const championName = details[4];

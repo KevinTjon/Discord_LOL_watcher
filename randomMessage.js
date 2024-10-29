@@ -11,7 +11,9 @@ const messages = [
     "??????????",
     "You ok?",
     "Maybe its alt account angle",
-    "Maybe this elo is a bit too high for u"
+    "Maybe this elo is a bit too high for u",
+    "Loser",
+    "Going to zou low I see",
     // Add more messages as needed
 ];
 
