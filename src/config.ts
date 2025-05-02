@@ -24,6 +24,33 @@ const configPath = path.join(__dirname, '..', 'config.json');
  */
 export function loadConfig(): Config {
   try {
+    // Load environment variables first
+    const envConfig = {
+      region: process.env.REGION,
+      riotApiKey: process.env.RIOT_API_KEY,
+      discordToken: process.env.DISCORD_TOKEN,
+      discordChannelId: process.env.DISCORD_CHANNEL_ID,
+      tftDiscordChannelId: process.env.TFT_DISCORD_CHANNEL_ID,
+      guildId: process.env.GUILD_ID
+    };
+
+    console.log('Environment variables loaded. Token available:', !!envConfig.discordToken);
+    
+    // If this is a cloud environment (like Render), prioritize environment variables
+    if (process.env.RENDER || process.env.NODE_ENV === 'production') {
+      console.log('Running in cloud environment, using environment variables');
+      return {
+        summoners: [],
+        region: envConfig.region || 'americas',
+        riotApiKey: envConfig.riotApiKey || '',
+        discordToken: envConfig.discordToken || '',
+        discordChannelId: envConfig.discordChannelId || '',
+        tftDiscordChannelId: envConfig.tftDiscordChannelId || '',
+        guildId: envConfig.guildId
+      };
+    }
+
+    // For local development, try to load from config file first
     if (fs.existsSync(configPath)) {
       const fileConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
       
@@ -31,16 +58,30 @@ export function loadConfig(): Config {
       // Environment variables take precedence over file config
       return {
         ...fileConfig,
-        region: process.env.REGION || fileConfig.region,
-        riotApiKey: process.env.RIOT_API_KEY || fileConfig.riotApiKey,
-        discordToken: process.env.DISCORD_TOKEN || fileConfig.discordToken,
-        discordChannelId: process.env.DISCORD_CHANNEL_ID || fileConfig.discordChannelId
+        region: envConfig.region || fileConfig.region,
+        riotApiKey: envConfig.riotApiKey || fileConfig.riotApiKey,
+        discordToken: envConfig.discordToken || fileConfig.discordToken,
+        discordChannelId: envConfig.discordChannelId || fileConfig.discordChannelId,
+        tftDiscordChannelId: envConfig.tftDiscordChannelId || fileConfig.tftDiscordChannelId,
+        guildId: envConfig.guildId || fileConfig.guildId
       };
     }
     
     console.log('Config file not found, creating with default values');
-    saveConfig(defaultConfig);
-    return defaultConfig;
+    
+    // Create a basic config with environment variables
+    const newConfig = {
+      summoners: [],
+      region: envConfig.region || 'americas',
+      riotApiKey: envConfig.riotApiKey || '',
+      discordToken: envConfig.discordToken || '',
+      discordChannelId: envConfig.discordChannelId || '',
+      tftDiscordChannelId: envConfig.tftDiscordChannelId || '',
+      guildId: envConfig.guildId
+    };
+    
+    saveConfig(newConfig);
+    return newConfig;
   } catch (error) {
     console.error('Error loading config:', error);
     return defaultConfig;

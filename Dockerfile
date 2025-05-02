@@ -2,7 +2,7 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Install dependencies for canvas
+# Install dependencies for canvas and fonts
 RUN apt-get update && apt-get install -y \
     build-essential \
     libcairo2-dev \
@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libgif-dev \
     librsvg2-dev \
+    fonts-noto \
+    fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
