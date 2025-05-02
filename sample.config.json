@@ -4,12 +4,15 @@
         "name": "SummonerName",
         "tagline": "tagline",
         "discordUsername": "discordUsername",
-        "lastMatchId": null
+        "lastMatchId": null,
+        "lastTFTMatchId": null
       }
       
     ],
     "region": "americas",
     "riotApiKey": "RIOT API KEY",
     "discordToken": "DISCORD TOKEN KEY",
-    "discordChannelId": "DISCORD CHANNEL ID"
+    "discordChannelId": "DISCORD CHANNEL ID",
+    "tftDiscordChannelId": "TFT DISCORD CHANNEL ID (OPTIONAL)",
+    "guildId": "GUILD ID (OPTIONAL - FOR COMMAND REGISTRATION)"
   }

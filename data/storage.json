@@ -1,0 +1,34 @@
+{
+  "playerRanks": {
+    "wnErsldaBSU4uuwFd4lZotUAB3k8wLRJNS6MP2wnc0e8GpM8npexgDl2bg": {
+      "summonerId": "wnErsldaBSU4uuwFd4lZotUAB3k8wLRJNS6MP2wnc0e8GpM8npexgDl2bg",
+      "tier": "DIAMOND",
+      "rank": "I",
+      "leaguePoints": 2,
+      "timestamp": 1746205147268
+    },
+    "R9mJnFKx22PUxckeG3Ah1VhYviwcCMvcRIAd2wuxL2Q0gNs": {
+      "summonerId": "R9mJnFKx22PUxckeG3Ah1VhYviwcCMvcRIAd2wuxL2Q0gNs",
+      "tier": "DIAMOND",
+      "rank": "III",
+      "leaguePoints": 13,
+      "timestamp": 1746204423023
+    },
+    "cSBGO1N0onX5CqJwHqGqrShK-h03GPdeQivwmI30i6xpHLL8oxFUmLJIOw": {
+      "summonerId": "cSBGO1N0onX5CqJwHqGqrShK-h03GPdeQivwmI30i6xpHLL8oxFUmLJIOw",
+      "tier": "DIAMOND",
+      "rank": "IV",
+      "leaguePoints": 60,
+      "timestamp": 1746205444192
+    }
+  },
+  "tftPlayerRanks": {
+    "0_LBjjWGPKK4dvaThqqaLyhrO4fo44v85Af6Dt8HObHTGN1G_aJNzUbGine8MzBxwoIpPQh6jZ7vpA": {
+      "puuid": "0_LBjjWGPKK4dvaThqqaLyhrO4fo44v85Af6Dt8HObHTGN1G_aJNzUbGine8MzBxwoIpPQh6jZ7vpA",
+      "tier": "GOLD",
+      "rank": "II",
+      "leaguePoints": 75,
+      "timestamp": 1746205151892
+    }
+  }
+}

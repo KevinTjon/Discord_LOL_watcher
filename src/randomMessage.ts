@@ -1,5 +1,5 @@
-// Dictionary of messages for League
-const leagueMessages = [
+// Dictionary of messages
+const leagueMessages: string[] = [
     "XDDDDDDDDDDDDD",
     "Nice try buddy",
     "Hello, your LP is going the wrong way",
@@ -15,8 +15,7 @@ const leagueMessages = [
     // Add more League-specific messages as needed
 ];
 
-// Dictionary of messages for TFT
-const tftMessages = [
+const tftMessages: string[] = [
     "Mortdogged",
     "Rumble ult incoming?",
     "Maybe roll more next time?",
@@ -37,11 +36,11 @@ const tftMessages = [
  * @param {string} gameType The game type ('league' or 'tft')
  * @returns {string} A random message
  */
-function getRandomMessage(gameType = 'league') {
+function getRandomMessage(gameType: string = 'league'): string {
     // Use the appropriate message list based on game type
     const messages = gameType.toLowerCase() === 'tft' ? tftMessages : leagueMessages;
-    const randomIndex = Math.floor(Math.random() * messages.length);
+    const randomIndex: number = Math.floor(Math.random() * messages.length);
     return messages[randomIndex];
 }
 
-module.exports = getRandomMessage;
+export default getRandomMessage; 

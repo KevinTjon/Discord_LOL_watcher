@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: hatewatcher-bot
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    envVars:
+      - key: REGION
+        sync: false
+      - key: RIOT_API_KEY
+        sync: false
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: DISCORD_CHANNEL_ID
+        sync: false
+      - key: TFT_DISCORD_CHANNEL_ID
+        sync: false
+      - key: GUILD_ID
+        sync: false 

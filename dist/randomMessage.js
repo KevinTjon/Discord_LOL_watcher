@@ -1,4 +1,6 @@
-// Dictionary of messages for League
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// Dictionary of messages
 const leagueMessages = [
     "XDDDDDDDDDDDDD",
     "Nice try buddy",
@@ -14,8 +16,6 @@ const leagueMessages = [
     "Next rank is the opposite way buddy",
     // Add more League-specific messages as needed
 ];
-
-// Dictionary of messages for TFT
 const tftMessages = [
     "Mortdogged",
     "Rumble ult incoming?",
@@ -31,7 +31,6 @@ const tftMessages = [
     "Maybe try hyper roll instead",
     // Add more TFT-specific messages as needed
 ];
-
 /**
  * Get a random message based on game type
  * @param {string} gameType The game type ('league' or 'tft')
@@ -43,5 +42,4 @@ function getRandomMessage(gameType = 'league') {
     const randomIndex = Math.floor(Math.random() * messages.length);
     return messages[randomIndex];
 }
-
-module.exports = getRandomMessage;
+exports.default = getRandomMessage;
