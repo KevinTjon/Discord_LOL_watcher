@@ -29,21 +29,49 @@ const getRandomMessage = require('./randomMessage');
 try {
     // On Windows systems, register common system fonts
     if (process.platform === 'win32') {
-        // Try to register Arial Unicode MS which has good Unicode coverage
-        registerFont('C:\\Windows\\Fonts\\arial.ttf', { family: 'Arial' });
-        registerFont('C:\\Windows\\Fonts\\arialuni.ttf', { family: 'Arial Unicode MS' });
-        console.log('Registered system fonts for multi-language support');
+        // Try to register Arial first
+        try {
+            registerFont('C:\\Windows\\Fonts\\arial.ttf', { family: 'Arial' });
+            console.log('Registered Arial font');
+        } catch (error) {
+            console.log('Arial font not found, trying alternatives');
+        }
+        
+        // Try Microsoft YaHei which has good CJK support
+        try {
+            registerFont('C:\\Windows\\Fonts\\msyh.ttf', { family: 'Microsoft YaHei' });
+            console.log('Registered Microsoft YaHei font');
+        } catch (error) {
+            console.log('Microsoft YaHei font not found, trying alternatives');
+        }
+        
+        // Try Segoe UI which is available on most Windows systems
+        try {
+            registerFont('C:\\Windows\\Fonts\\segoeui.ttf', { family: 'Segoe UI' });
+            console.log('Registered Segoe UI font');
+        } catch (error) {
+            console.log('Segoe UI font not found');
+        }
     } else if (process.platform === 'darwin') {
         // macOS paths
-        registerFont('/System/Library/Fonts/Apple Color Emoji.ttc', { family: 'Apple Color Emoji' });
-        registerFont('/System/Library/Fonts/PingFang.ttc', { family: 'PingFang' });
+        try {
+            registerFont('/System/Library/Fonts/Apple Color Emoji.ttc', { family: 'Apple Color Emoji' });
+            registerFont('/System/Library/Fonts/PingFang.ttc', { family: 'PingFang' });
+        } catch (error) {
+            console.log('Error registering macOS fonts:', error.message);
+        }
     } else {
         // Linux paths - adjust as needed
-        registerFont('/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc', { family: 'Noto Sans CJK' });
+        try {
+            registerFont('/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc', { family: 'Noto Sans CJK' });
+        } catch (error) {
+            console.log('Error registering Linux fonts:', error.message);
+        }
     }
+    console.log('Font registration completed');
 } catch (error) {
-    console.error('Error registering fonts:', error.message);
-    console.log('Will use default fonts which may not support all characters');
+    console.error('Error in font registration:', error.message);
+    console.log('Will use default system fonts which may not support all characters');
 }
 
 const client = new Client({

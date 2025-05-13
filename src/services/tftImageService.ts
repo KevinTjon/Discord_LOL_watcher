@@ -1368,15 +1368,16 @@ function getPlacementSuffix(placement: number): string {
  * Get taunt message with the image (same format as LoL image service)
  * @param {string} discordUsername Discord username
  * @param {Buffer} imageBuffer Image buffer
+ * @param {boolean} mentionsEnabled Whether mentions are enabled globally
  * @returns {MessageCreateOptions} Message options
  */
-export function getTauntMessage(discordUsername: string, imageBuffer: Buffer): MessageCreateOptions {
+export function getTauntMessage(discordUsername: string, imageBuffer: Buffer, mentionsEnabled: boolean = true): MessageCreateOptions {
     // Create attachment from buffer
     const attachment = new AttachmentBuilder(imageBuffer, { name: 'tft-loss.png' });
     
-    // Same format as LoL - just mention the user
+    // Same format as LoL - just mention the user if globally enabled
     return {
-        content: `<@${discordUsername}>`,
+        content: mentionsEnabled ? `<@${discordUsername}>` : '',
         files: [attachment]
     };
 }

@@ -176,4 +176,30 @@ export async function handleClearMessages(interaction: ChatInputCommandInteracti
         console.error('Error clearing messages:', error);
         await interaction.editReply('An error occurred while deleting messages. Some messages may not have been deleted.');
     }
+}
+
+/**
+ * Handle the /togglementions slash command
+ * @param {ChatInputCommandInteraction} interaction The slash command interaction
+ */
+export async function handleToggleMentions(interaction: ChatInputCommandInteraction): Promise<void> {
+    await interaction.deferReply();
+    
+    const enabled = interaction.options.getBoolean('enabled', true); // Force required, will never be null
+    
+    try {
+        const config = configService.loadConfig();
+        
+        // Update the global mention preference
+        config.mentionsEnabled = enabled;
+        configService.saveConfig(config);
+        
+        await interaction.editReply(
+            `✅ ${enabled ? 'Enabled' : 'Disabled'} mentions globally. ` +
+            `The bot will ${enabled ? 'now' : 'no longer'} @mention users in notifications.`
+        );
+    } catch (error) {
+        console.error('Error toggling mentions:', error);
+        await interaction.editReply('An error occurred while updating mention preferences.');
+    }
 } 

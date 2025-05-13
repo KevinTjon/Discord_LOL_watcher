@@ -6,6 +6,8 @@ export interface Summoner {
   tagline: string;
   discordUsername: string;
   lastMatchId: string | null;
+  lastTFTMatchId?: string | null;
+  mentionEnabled?: boolean; // Whether to mention the user in notifications, defaults to true
 }
 
 /**
@@ -17,7 +19,9 @@ export interface Config {
   riotApiKey: string;
   discordToken: string;
   discordChannelId: string;
+  tftDiscordChannelId?: string;
   guildId?: string; // Optional guild ID for testing slash commands
+  mentionsEnabled?: boolean; // Global setting for mentions
 }
 
 /**

@@ -28,5 +28,13 @@ export const commands = [
     
     new SlashCommandBuilder()
         .setName('clearmessages')
-        .setDescription('Delete all messages from the bot in the current channel')
+        .setDescription('Delete all messages from the bot in the current channel'),
+
+    new SlashCommandBuilder()
+        .setName('togglementions')
+        .setDescription('Toggle global mentions for all users')
+        .addBooleanOption(option =>
+            option.setName('enabled')
+                .setDescription('Whether to enable or disable mentions')
+                .setRequired(true))
 ]; 

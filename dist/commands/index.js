@@ -24,5 +24,11 @@ exports.commands = [
         .setRequired(true)),
     new discord_js_1.SlashCommandBuilder()
         .setName('clearmessages')
-        .setDescription('Delete all messages from the bot in the current channel')
+        .setDescription('Delete all messages from the bot in the current channel'),
+    new discord_js_1.SlashCommandBuilder()
+        .setName('togglementions')
+        .setDescription('Toggle global mentions for all users')
+        .addBooleanOption(option => option.setName('enabled')
+        .setDescription('Whether to enable or disable mentions')
+        .setRequired(true))
 ];

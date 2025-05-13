@@ -14,6 +14,7 @@ export interface Config {
     discordChannelId: string;
     tftDiscordChannelId?: string;
     guildId?: string;
+    mentionsEnabled?: boolean;
 }
 
 export interface SummonerData {
@@ -32,6 +33,7 @@ export interface MatchDetails {
             participants: Participant[];
         };
     };
+    rankedData?: RankedData;
 }
 
 export interface Participant {

@@ -7,6 +7,7 @@ exports.handleAddSummoner = handleAddSummoner;
 exports.handleListSummoners = handleListSummoners;
 exports.handleRemoveSummoner = handleRemoveSummoner;
 exports.handleClearMessages = handleClearMessages;
+exports.handleToggleMentions = handleToggleMentions;
 const discord_js_1 = require("discord.js");
 const config_1 = __importDefault(require("../config"));
 const riotService_1 = __importDefault(require("../services/riotService"));
@@ -161,5 +162,25 @@ async function handleClearMessages(interaction) {
     catch (error) {
         console.error('Error clearing messages:', error);
         await interaction.editReply('An error occurred while deleting messages. Some messages may not have been deleted.');
+    }
+}
+/**
+ * Handle the /togglementions slash command
+ * @param {ChatInputCommandInteraction} interaction The slash command interaction
+ */
+async function handleToggleMentions(interaction) {
+    await interaction.deferReply();
+    const enabled = interaction.options.getBoolean('enabled', true); // Force required, will never be null
+    try {
+        const config = config_1.default.loadConfig();
+        // Update the global mention preference
+        config.mentionsEnabled = enabled;
+        config_1.default.saveConfig(config);
+        await interaction.editReply(`✅ ${enabled ? 'Enabled' : 'Disabled'} mentions globally. ` +
+            `The bot will ${enabled ? 'now' : 'no longer'} @mention users in notifications.`);
+    }
+    catch (error) {
+        console.error('Error toggling mentions:', error);
+        await interaction.editReply('An error occurred while updating mention preferences.');
     }
 }

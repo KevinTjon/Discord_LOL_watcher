@@ -6,7 +6,7 @@ import imageService from './services/imageService';
 import tftService from './services/tftService';
 import tftImageService from './services/tftImageService';
 import { commands } from './commands/index';
-import { handleAddSummoner, handleListSummoners, handleRemoveSummoner, handleClearMessages } from './commands/handlers';
+import { handleAddSummoner, handleListSummoners, handleRemoveSummoner, handleClearMessages, handleToggleMentions } from './commands/handlers';
 import { TFTMatchDetails } from './types';
 
 // Create Discord client
@@ -76,19 +76,33 @@ client.on('messageCreate', async (message: Message) => {
 client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.isChatInputCommand()) return;
     
-    switch (interaction.commandName) {
-        case 'addsummoner':
-            await handleAddSummoner(interaction);
-            break;
-        case 'listsummoners':
-            await handleListSummoners(interaction);
-            break;
-        case 'removesummoner':
-            await handleRemoveSummoner(interaction);
-            break;
-        case 'clearmessages':
-            await handleClearMessages(interaction);
-            break;
+    try {
+        switch (interaction.commandName) {
+            case 'addsummoner':
+                await handleAddSummoner(interaction);
+                break;
+            case 'listsummoners':
+                await handleListSummoners(interaction);
+                break;
+            case 'removesummoner':
+                await handleRemoveSummoner(interaction);
+                break;
+            case 'clearmessages':
+                await handleClearMessages(interaction);
+                break;
+            case 'togglementions':
+                await handleToggleMentions(interaction);
+                break;
+            default:
+                await interaction.reply({ content: 'Unknown command', ephemeral: true });
+        }
+    } catch (error) {
+        console.error('Error handling command:', error);
+        if (!interaction.replied && !interaction.deferred) {
+            await interaction.reply({ content: 'An error occurred while processing the command.', ephemeral: true });
+        } else if (!interaction.replied) {
+            await interaction.editReply('An error occurred while processing the command.');
+        }
     }
 });
 
@@ -152,14 +166,17 @@ async function processRankedLoss(details: string[], discordUsername: string): Pr
         // Get Discord channel
         const config = configService.loadConfig();
         const channel = client.channels.cache.get(config.discordChannelId) as TextChannel;
+        
+        // Use global mention setting
+        const mentionsEnabled = config.mentionsEnabled ?? true;
 
         if (channel) {
-            console.log("Sending to channel");
+            console.log("Sending loss to channel");
             // Send message with image
-            const message = imageService.getTauntMessage(discordUsername, imageBuffer);
+            const message = imageService.getTauntMessage(discordUsername, imageBuffer, mentionsEnabled);
             await channel.send(message);
         } else {
-            console.error('Channel not found.');
+            console.error('Channel not found for loss notification.');
         }
     } catch (error) {
         console.error('Error processing ranked loss:', error);
@@ -197,10 +214,13 @@ async function processTFTRankedLoss(matchDetails: TFTMatchDetails, discordUserna
         
         console.log("Processing TFT ranked loss");
         
-        // Get summoner name
+        // Get summoner name and config
         const config = configService.loadConfig();
         const summoner = config.summoners.find(s => s.discordUsername === discordUsername);
         const summonerName = summoner ? summoner.name : "Unknown";
+        
+        // Use global mention setting
+        const mentionsEnabled = config.mentionsEnabled ?? true;
         
         // Generate image
         const imageBuffer = await tftImageService.generateImage(matchDetails, rankedData, summonerName);
@@ -213,7 +233,7 @@ async function processTFTRankedLoss(matchDetails: TFTMatchDetails, discordUserna
         if (channel) {
             console.log("Sending TFT loss to channel");
             // Send message with image
-            const message = tftImageService.getTauntMessage(discordUsername, imageBuffer);
+            const message = tftImageService.getTauntMessage(discordUsername, imageBuffer, mentionsEnabled);
             await channel.send(message);
         } else {
             console.error('Channel not found for TFT loss notification.');

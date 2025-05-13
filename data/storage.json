@@ -2,33 +2,120 @@
   "playerRanks": {
     "wnErsldaBSU4uuwFd4lZotUAB3k8wLRJNS6MP2wnc0e8GpM8npexgDl2bg": {
       "summonerId": "wnErsldaBSU4uuwFd4lZotUAB3k8wLRJNS6MP2wnc0e8GpM8npexgDl2bg",
-      "tier": "DIAMOND",
-      "rank": "I",
-      "leaguePoints": 2,
-      "timestamp": 1746205147268
+      "timestamp": 1746245043020
     },
     "R9mJnFKx22PUxckeG3Ah1VhYviwcCMvcRIAd2wuxL2Q0gNs": {
       "summonerId": "R9mJnFKx22PUxckeG3Ah1VhYviwcCMvcRIAd2wuxL2Q0gNs",
-      "tier": "DIAMOND",
-      "rank": "III",
-      "leaguePoints": 13,
       "timestamp": 1746204423023
     },
     "cSBGO1N0onX5CqJwHqGqrShK-h03GPdeQivwmI30i6xpHLL8oxFUmLJIOw": {
       "summonerId": "cSBGO1N0onX5CqJwHqGqrShK-h03GPdeQivwmI30i6xpHLL8oxFUmLJIOw",
+      "timestamp": 1746205444192
+    },
+    "43X7I0-bxQrBXKf8gZohQZeHnNRRJJ1oSz3EW-XtW-MrnsTpCP97Jyb1tA": {
+      "summonerId": "43X7I0-bxQrBXKf8gZohQZeHnNRRJJ1oSz3EW-XtW-MrnsTpCP97Jyb1tA",
+      "timestamp": 1746357605787
+    },
+    "r8YgsS8YJGJIegxyvKfjajU5tX85oZw3biDO4L70xQO2UHs": {
+      "summonerId": "r8YgsS8YJGJIegxyvKfjajU5tX85oZw3biDO4L70xQO2UHs",
+      "timestamp": 1746339545333
+    },
+    "jb4OrC_-yvuHE4NnoP5-kPAeMjJpHJL4ItW1yhfgM5q2G9U": {
+      "summonerId": "jb4OrC_-yvuHE4NnoP5-kPAeMjJpHJL4ItW1yhfgM5q2G9U",
+      "timestamp": 1746422223018
+    },
+    "obFnn6pIXMZzpmCj0SjqrkwwLCPJOz6x2sJJIxPf4kEt1W9x": {
+      "summonerId": "obFnn6pIXMZzpmCj0SjqrkwwLCPJOz6x2sJJIxPf4kEt1W9x",
+      "timestamp": 1746414484079
+    },
+    "FlX7SWKrY8vU8J67di4jgHRZciINeWZdDUWka5v8s6MzAb0": {
+      "summonerId": "FlX7SWKrY8vU8J67di4jgHRZciINeWZdDUWka5v8s6MzAb0",
+      "tier": "MASTER",
+      "rank": "I",
+      "leaguePoints": 345,
+      "timestamp": 1747077062997
+    },
+    "euSq9IB3zuG3Pak2Wiirb4f3OI_7UwgXob9zaSEf8SWZqWE": {
+      "summonerId": "euSq9IB3zuG3Pak2Wiirb4f3OI_7UwgXob9zaSEf8SWZqWE",
+      "tier": "EMERALD",
+      "rank": "II",
+      "leaguePoints": 0,
+      "timestamp": 1747111745941
+    },
+    "kkCxqwqWz9-sxyyee-l_r5XvXWY67t44-PtsU71dy7U2ESud": {
+      "summonerId": "kkCxqwqWz9-sxyyee-l_r5XvXWY67t44-PtsU71dy7U2ESud",
+      "tier": "EMERALD",
+      "rank": "II",
+      "leaguePoints": 18,
+      "timestamp": 1747111023960
+    },
+    "jnWuCXDjiw65JoatTepMa_dqhXt8mQelWaJMKCJA2d8GOj18ZkypbZpO1g": {
+      "summonerId": "jnWuCXDjiw65JoatTepMa_dqhXt8mQelWaJMKCJA2d8GOj18ZkypbZpO1g",
+      "timestamp": 1746758343606
+    },
+    "huippnceEQEDmOoH_gWm_-MihpZ--7DMnj5wEXVFOCCEt4qGb5UsqhjKPA": {
+      "summonerId": "huippnceEQEDmOoH_gWm_-MihpZ--7DMnj5wEXVFOCCEt4qGb5UsqhjKPA",
+      "timestamp": 1746846486295
+    },
+    "WxoK2CaOodiiXjSyV9TQK2Eu6g0eeeA5ZW2aWNeZMmjHQcdB": {
+      "summonerId": "WxoK2CaOodiiXjSyV9TQK2Eu6g0eeeA5ZW2aWNeZMmjHQcdB",
+      "tier": "MASTER",
+      "rank": "I",
+      "leaguePoints": 246,
+      "timestamp": 1747021625326
+    },
+    "hzPIl7f91ZmENVMMgDeSaDF1GabwGflf0vckFdEiKvI39T1d": {
+      "summonerId": "hzPIl7f91ZmENVMMgDeSaDF1GabwGflf0vckFdEiKvI39T1d",
+      "tier": "EMERALD",
+      "rank": "IV",
+      "leaguePoints": 57,
+      "timestamp": 1747162502840
+    },
+    "pUHBZehphY__7jmHYa5QxsiREipxqrqKGS30Q6jcS5hjrF5TT0XlYqkGeA": {
+      "summonerId": "pUHBZehphY__7jmHYa5QxsiREipxqrqKGS30Q6jcS5hjrF5TT0XlYqkGeA",
       "tier": "DIAMOND",
       "rank": "IV",
-      "leaguePoints": 60,
-      "timestamp": 1746205444192
+      "leaguePoints": 0,
+      "timestamp": 1747026065266
+    },
+    "lAvZ4mMWFZlACgY-b0baS1VPM3ZZ8NC85scUgs0h8z2djyc": {
+      "summonerId": "lAvZ4mMWFZlACgY-b0baS1VPM3ZZ8NC85scUgs0h8z2djyc",
+      "tier": "PLATINUM",
+      "rank": "III",
+      "leaguePoints": 35,
+      "timestamp": 1747111021170
+    },
+    "238au5fPtkSU1mt27wYirf2kKSlNloFh9KCnqpk2hMjc0l0": {
+      "summonerId": "238au5fPtkSU1mt27wYirf2kKSlNloFh9KCnqpk2hMjc0l0",
+      "timestamp": 1746946081063
+    },
+    "aLvhZdgfe9J8K26NUzcitDhA13gP3W3NhAZawUiw8Vj6OK4R8lTF8b4jxQ": {
+      "summonerId": "aLvhZdgfe9J8K26NUzcitDhA13gP3W3NhAZawUiw8Vj6OK4R8lTF8b4jxQ",
+      "tier": "GOLD",
+      "rank": "I",
+      "leaguePoints": 58,
+      "timestamp": 1747099142354
+    },
+    "lTYwJ2F96kJhHPYB-kYcJ_CwDy5YNIakY506-4Dv4ftRU3U": {
+      "summonerId": "lTYwJ2F96kJhHPYB-kYcJ_CwDy5YNIakY506-4Dv4ftRU3U",
+      "tier": "DIAMOND",
+      "rank": "III",
+      "leaguePoints": 13,
+      "timestamp": 1747020365140
     }
   },
   "tftPlayerRanks": {
     "0_LBjjWGPKK4dvaThqqaLyhrO4fo44v85Af6Dt8HObHTGN1G_aJNzUbGine8MzBxwoIpPQh6jZ7vpA": {
       "puuid": "0_LBjjWGPKK4dvaThqqaLyhrO4fo44v85Af6Dt8HObHTGN1G_aJNzUbGine8MzBxwoIpPQh6jZ7vpA",
-      "tier": "GOLD",
-      "rank": "II",
-      "leaguePoints": 75,
-      "timestamp": 1746205151892
+      "timestamp": 1746332404857
+    },
+    "-2-jpvFivnOcb2RvOnD5cMWquEx1bAl8QaPupqxFtMGEqlQxCx7rspbCM-5VP6EfXfLR7nJTdafQ_A": {
+      "puuid": "-2-jpvFivnOcb2RvOnD5cMWquEx1bAl8QaPupqxFtMGEqlQxCx7rspbCM-5VP6EfXfLR7nJTdafQ_A",
+      "timestamp": 1746403081631
+    },
+    "TgBnxAKUzbxNEQVHVtNUiA8jTfAflk1zyq7ZAwKEP48bQbFu8BJqXsGUIdEbKnkKrMDpZgLRmcfXog": {
+      "puuid": "TgBnxAKUzbxNEQVHVtNUiA8jTfAflk1zyq7ZAwKEP48bQbFu8BJqXsGUIdEbKnkKrMDpZgLRmcfXog",
+      "timestamp": 1746403023393
     }
   }
 }

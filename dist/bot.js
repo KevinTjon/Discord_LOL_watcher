@@ -66,19 +66,35 @@ client.on('messageCreate', async (message) => {
 client.on('interactionCreate', async (interaction) => {
     if (!interaction.isChatInputCommand())
         return;
-    switch (interaction.commandName) {
-        case 'addsummoner':
-            await (0, handlers_1.handleAddSummoner)(interaction);
-            break;
-        case 'listsummoners':
-            await (0, handlers_1.handleListSummoners)(interaction);
-            break;
-        case 'removesummoner':
-            await (0, handlers_1.handleRemoveSummoner)(interaction);
-            break;
-        case 'clearmessages':
-            await (0, handlers_1.handleClearMessages)(interaction);
-            break;
+    try {
+        switch (interaction.commandName) {
+            case 'addsummoner':
+                await (0, handlers_1.handleAddSummoner)(interaction);
+                break;
+            case 'listsummoners':
+                await (0, handlers_1.handleListSummoners)(interaction);
+                break;
+            case 'removesummoner':
+                await (0, handlers_1.handleRemoveSummoner)(interaction);
+                break;
+            case 'clearmessages':
+                await (0, handlers_1.handleClearMessages)(interaction);
+                break;
+            case 'togglementions':
+                await (0, handlers_1.handleToggleMentions)(interaction);
+                break;
+            default:
+                await interaction.reply({ content: 'Unknown command', ephemeral: true });
+        }
+    }
+    catch (error) {
+        console.error('Error handling command:', error);
+        if (!interaction.replied && !interaction.deferred) {
+            await interaction.reply({ content: 'An error occurred while processing the command.', ephemeral: true });
+        }
+        else if (!interaction.replied) {
+            await interaction.editReply('An error occurred while processing the command.');
+        }
     }
 });
 /**
@@ -132,14 +148,16 @@ async function processRankedLoss(details, discordUsername) {
         // Get Discord channel
         const config = config_1.default.loadConfig();
         const channel = client.channels.cache.get(config.discordChannelId);
+        // Use global mention setting
+        const mentionsEnabled = config.mentionsEnabled ?? true;
         if (channel) {
-            console.log("Sending to channel");
+            console.log("Sending loss to channel");
             // Send message with image
-            const message = imageService_1.default.getTauntMessage(discordUsername, imageBuffer);
+            const message = imageService_1.default.getTauntMessage(discordUsername, imageBuffer, mentionsEnabled);
             await channel.send(message);
         }
         else {
-            console.error('Channel not found.');
+            console.error('Channel not found for loss notification.');
         }
     }
     catch (error) {
@@ -174,10 +192,12 @@ async function processTFTRankedLoss(matchDetails, discordUsername, PUUID) {
             return;
         }
         console.log("Processing TFT ranked loss");
-        // Get summoner name
+        // Get summoner name and config
         const config = config_1.default.loadConfig();
         const summoner = config.summoners.find(s => s.discordUsername === discordUsername);
         const summonerName = summoner ? summoner.name : "Unknown";
+        // Use global mention setting
+        const mentionsEnabled = config.mentionsEnabled ?? true;
         // Generate image
         const imageBuffer = await tftImageService_1.default.generateImage(matchDetails, rankedData, summonerName);
         console.log("TFT image generated");
@@ -187,7 +207,7 @@ async function processTFTRankedLoss(matchDetails, discordUsername, PUUID) {
         if (channel) {
             console.log("Sending TFT loss to channel");
             // Send message with image
-            const message = tftImageService_1.default.getTauntMessage(discordUsername, imageBuffer);
+            const message = tftImageService_1.default.getTauntMessage(discordUsername, imageBuffer, mentionsEnabled);
             await channel.send(message);
         }
         else {

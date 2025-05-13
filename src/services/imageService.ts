@@ -292,11 +292,12 @@ export function drawCenteredText(ctx: CanvasRenderingContext2D, text: string, x:
  * Get image without additional text message
  * @param {string} discordUsername Discord username
  * @param {Buffer} imageBuffer Image buffer
+ * @param {boolean} mentionsEnabled Whether mentions are enabled globally
  * @returns {{ content: string, files: Buffer[] }} Message content
  */
-export function getTauntMessage(discordUsername: string, imageBuffer: Buffer): { content: string, files: Buffer[] } {
+export function getTauntMessage(discordUsername: string, imageBuffer: Buffer, mentionsEnabled: boolean = true): { content: string, files: Buffer[] } {
     return {
-        content: `<@${discordUsername}>`, // Only mention the user, no taunt message
+        content: mentionsEnabled ? `<@${discordUsername}>` : '', // Only mention if globally enabled
         files: [imageBuffer]
     };
 }

@@ -89,10 +89,15 @@ export async function getMatchDetails(matchID: string): Promise<MatchDetails | n
             `https://${config.region}.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${config.riotApiKey}`
         );
         
-        // Cache the response
-        cache[cacheKey] = { data: response, timestamp: Date.now() };
+        // Create match details object with response data
+        const matchDetails: MatchDetails = {
+            data: response.data
+        };
         
-        return response;
+        // Cache the response
+        cache[cacheKey] = { data: matchDetails, timestamp: Date.now() };
+        
+        return matchDetails;
     } catch (error) {
         console.error('Error in getMatchDetails:', error);
         return null;
@@ -124,10 +129,16 @@ export async function getRankedInfo(summonerId: string): Promise<RankedData | nu
             leaguePoints: 0
         };
 
-        if(response.data.length > 0) {
-            rankedData.tier = response.data[0].tier;
-            rankedData.rank = response.data[0].rank;
-            rankedData.leaguePoints = response.data[0].leaguePoints;
+        // Find the solo/duo queue entry
+        let soloDuoEntry = null;
+        if (response.data.length > 0) {
+            soloDuoEntry = response.data.find((entry: any) => entry.queueType === 'RANKED_SOLO_5x5');
+        }
+
+        if(soloDuoEntry) {
+            rankedData.tier = soloDuoEntry.tier;
+            rankedData.rank = soloDuoEntry.rank;
+            rankedData.leaguePoints = soloDuoEntry.leaguePoints;
             
             // Calculate LP loss based on previous data
             const lpLoss = storageService.calculateLPLoss(
@@ -185,20 +196,27 @@ export async function extractDetails(matchDetails: MatchDetails, PUUID: string):
             throw new Error('Summoner not found in match');
         }
 
-        details.push(info.participants[idNum].riotIdGameName);
+        const participant = info.participants[idNum];
+        details.push(participant.riotIdGameName);
         details.push(info.queueId.toString());
-        details.push(info.participants[idNum].summonerId);
-        details.push(info.participants[idNum].championId.toString());
-        details.push(info.participants[idNum].championName);
-        details.push(info.participants[idNum].individualPosition);
-        details.push(info.participants[idNum].win.toString());
+        details.push(participant.summonerId);
+        details.push(participant.championId.toString());
+        details.push(participant.championName);
+        details.push(participant.individualPosition);
+        details.push(participant.win.toString());
         
-        const kills = info.participants[idNum].kills;
-        const deaths = info.participants[idNum].deaths;
-        const assists = info.participants[idNum].assists;
+        const kills = participant.kills;
+        const deaths = participant.deaths;
+        const assists = participant.assists;
         const kda = `${kills}/${deaths}/${assists}`;
-
         details.push(kda);
+
+        // Fetch rank data - getRankedInfo will handle storing it
+        const rankedData = await getRankedInfo(participant.summonerId);
+        if (rankedData) {
+            // Attach rank data to match details for reference
+            matchDetails.rankedData = rankedData;
+        }
 
         return details;
     } catch (error) {

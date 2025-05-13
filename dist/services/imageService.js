@@ -267,11 +267,12 @@ function drawCenteredText(ctx, text, x, y, maxWidth) {
  * Get image without additional text message
  * @param {string} discordUsername Discord username
  * @param {Buffer} imageBuffer Image buffer
+ * @param {boolean} mentionsEnabled Whether mentions are enabled globally
  * @returns {{ content: string, files: Buffer[] }} Message content
  */
-function getTauntMessage(discordUsername, imageBuffer) {
+function getTauntMessage(discordUsername, imageBuffer, mentionsEnabled = true) {
     return {
-        content: `<@${discordUsername}>`, // Only mention the user, no taunt message
+        content: mentionsEnabled ? `<@${discordUsername}>` : '', // Only mention if globally enabled
         files: [imageBuffer]
     };
 }
